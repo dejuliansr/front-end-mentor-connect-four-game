@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@theme {
+  --color-regal-blue: #243c5a;
+  --color-Black: hsl(0, 0%, 0%);
+  --color-Purple: hsl(257, 67%, 51%);
+  --color-Light-Purple: hsl(257, 100%, 64%);
+  --color-Pink: hsl(347, 97%, 70%);
+  --color-Yellow: hsl(41, 100%, 70%);
+  --color-White: hsl(0, 0%, 100%);
+}
