@@ -1,26 +1,26 @@
 <template>
-  <div class="flex flex-col items-center justify-center min-h-screen p-2 sm:p-0 bg-Light-Purple">
+  <div class="flex flex-col items-center justify-center lg:justify-normal min-h-screen p-2 sm:p-0 bg-Light-Purple z-0">
     <!-- Header (Menu & Restart) -->
     <Transition name="fade-header" appear>
-      <div class="flex items-center justify-between w-full max-w-xl md:pt-4">
+      <div class="flex items-center justify-between w-full max-w-xl md:pt-4 lg:pt-12">
         <button @click="showMenu = true" class="bg-Purple px-6 py-2 hover:bg-Pink text-white font-bold text-base rounded-full cursor-pointer">MENU</button>
         <img src="/images/logo.svg" alt="">
         <button @click="restartGame()" class="bg-Purple px-6 py-3 hover:bg-Pink text-white font-bold text-base rounded-full cursor-pointer">RESTART</button>
         <Transition name="fade-scale" mode="out-in">
           <div v-if="showMenu" class="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
             <div class="bg-Light-Purple p-10 rounded-3xl w-full max-w-md shadow-lg sm:border-4 sm:border-b-8 sm:border-black relative">
-              <div class="space-y-5 text-center">
+              <div class="text-center">
                 <p class="text-5xl text-White py-7 font-bold">PAUSE</p>
     
-                <button  @click="continueGame" class="w-full h-16 text-center text-xl px-4 bg-White text-Black font-bold rounded-2xl border-2 border-black hover:border-Purple shadow-md cursor-pointer btn">
+                <button  @click="continueGame" class="w-full h-16 text-center text-xl px-4 mt-5 bg-White text-Black font-bold rounded-2xl border-2 border-black hover:border-Purple shadow-md cursor-pointer btn">
                   COUNTINUE GAME
                 </button>
       
-                <button @click="restartGame()" class="w-full h-16 text-center text-xl px-4 bg-White text-Black font-bold rounded-2xl border-2 border-black hover:border-Purple shadow-md cursor-pointer btn">
+                <button @click="restartGame()" class="w-full h-16 text-center text-xl px-4 mt-5 bg-White text-Black font-bold rounded-2xl border-2 border-black hover:border-Purple shadow-md cursor-pointer btn">
                   RESTART
                 </button>
       
-                <button @click="emit('back-to-menu')" class="w-full h-16 text-center text-xl px-4 bg-White text-Black font-bold rounded-2xl border-2 border-black hover:border-Purple shadow-md cursor-pointer btn">
+                <button @click="emit('back-to-menu')" class="w-full h-16 text-center text-xl px-4 mt-5 bg-White text-Black font-bold rounded-2xl border-2 border-black hover:border-Purple shadow-md cursor-pointer btn">
                   QUIT GAME
                 </button>
               </div>
@@ -33,12 +33,12 @@
     <div class="grid grid-cols-2 justify-items-center lg:flex lg:flex-row lg:justify-center lg:items-center w-full md:max-w-2xl lg:max-w-5xl m-4 lg:gap-10">
       <!-- score player one -->
       <transition name="fade-player-one" appear>
-        <div class="relative flex justify-center items-center bg-white w-5/6 lg:w-auto rounded-3xl p-4 lg:p-7 border-4 border-b-8 border-black lg:order-1">
+        <div class="relative flex justify-center items-center bg-white w-5/6 lg:w-1/7 rounded-3xl p-4 lg:p-7 border-4 border-b-8 border-black lg:order-1">
           <div class="absolute -left-5 lg:left-1/2 md:top-4 lg:top-0 transform lg:-translate-x-1/2 lg:-translate-y-1/2">
             <img src="/images/player-one.svg" alt="Icon Player One" class="h-12">
           </div>
           <div class="flex flex-col md:flex-row lg:flex-col justify-center items-center md:gap-7 lg:gap-0 lg:pt-4">
-            <p class="font-bold">PLAYER 1</p>
+            <p class="font-bold">{{ props.gameMode === 'playerVsCom' ? 'YOU' : 'PLAYER 1' }}</p>
             <p class="text-3xl md:text-5xl font-bold">{{ score.player1 }}</p>
           </div>
         </div>
@@ -46,13 +46,13 @@
 
       <transition name="fade-player-two" appear>
         <!-- score player two -->
-        <div class="relative flex justify-center items-center bg-white w-5/6 md:py-5 lg:w-auto rounded-3xl lg:p-7 border-4 border-b-8 border-black lg:order-3">
+        <div class="relative flex justify-center items-center bg-white w-5/6 md:py-5 lg:w-1/7 rounded-3xl lg:p-7 border-4 border-b-8 border-black lg:order-3">
           <div class="absolute -right-5 lg:right-5 lg:left-1/2 md:top-4 lg:top-0 transform lg:-translate-x-1/2 lg:-translate-y-1/2">
             <img src="/images/player-two.svg" alt="Icon Player Two" class="h-12">
           </div>
           <div class="flex flex-col md:flex-row-reverse lg:flex-col justify-center items-center gap-0 md:gap-7 lg:gap-0 lg:pt-4">
-            <p class="font-bold">PLAYER 2</p>
-            <p class="text-3xl md:text-5xl font-bold">{{ score.player2 }}</p>
+            <p class="font-bold">{{ props.gameMode === 'playerVsCom' ? 'COM' : 'PLAYER 2' }}</p>
+            <p class="text-3xl md:text-5xl font-bold">{{ props.gameMode === 'playerVsCom' ? score.com : score.player2 }}</p>
           </div>
         </div>
       </transition>
@@ -134,13 +134,51 @@
           </div>
         </transition>
 
+        <transition name="fade-timer" appear>
+          <!-- Timer -->
+          <div class="absolute top-[62%] sm:top-3/4 left-1/2 transform translate-y-3/4 -translate-x-1/2 flex flex-col items-center z-40">
+            <div class="relative w-full flex justify-center">
+              <img 
+                v-if="currentPlayer === 'red'" 
+                src="/images/turn-background-red.svg" 
+                alt="Turn Background Red" 
+                class="object-contain"
+              >
+              <img 
+                v-if="currentPlayer === 'yellow'" 
+                src="/images/turn-background-yellow.svg" 
+                alt="Turn Background Yellow" 
+                class="object-contai"
+              >
+            </div>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <!-- Menambahkan kelas dinamis untuk warna teks yang benar -->
+              <p :class="currentPlayer === 'red' ? 'text-white text-base font-bold' : 'text-black text-base font-bold'">
+                {{
+                  props.gameMode === 'playerVsCom' ?
+                    (currentPlayer === 'red' ? 'YOUR TURN' : "COM'S TURN") :
+                    `PLAYER ${currentPlayer === 'red' ? '1' : '2'}'S TURN`
+                }}
+              </p>
+              <!-- Menambahkan kelas dinamis untuk warna teks timer -->
+              <p :class="currentPlayer === 'red' ? 'text-white text-3xl font-bold' : 'text-black text-3xl font-bold'">
+                {{ timer }}s
+              </p>
+            </div>
+          </div>
+        </transition>
+
         <transition name="fade-scale">
           <div 
             v-if="winner || isDraw"
             class="absolute top-[60%] sm:top-3/4 left-1/2 transform translate-y-3/4 -translate-x-1/2 flex flex-col items-center bg-white py-3 px-12 w-60 rounded-xl shadow-xl border-4 border-black z-50"
           >
             <p class="font-bold text-black text-sm" v-if="winner">
-              {{ winner === 'player1' ? 'PLAYER 1' : 'PLAYER 2' }}
+              {{ 
+                winner === 'player1' ? (props.gameMode === 'playerVsCom' ? 'YOU' : 'PLAYER 1') : 
+                winner === 'player2' ? 'PLAYER 2' : 
+                'COM' 
+              }}
             </p>
             <p class="text-5xl font-bold text-black" v-if="winner">WINS</p>
             <p class="text-5xl font-bold text-black" v-if="isDraw">DRAW</p>
@@ -155,39 +193,9 @@
       </div>
     </div>
 
-    <transition name="fade-timer" appear>
-      <!-- Timer -->
-      <div class="relative bottom-10 md:bottom-14 transform flex flex-col items-center z-40">
-        <div class="relative w-full flex justify-center">
-          <img 
-            v-if="currentPlayer === 'red'" 
-            src="/images/turn-background-red.svg" 
-            alt="Turn Background Red" 
-            class="object-contain"
-          >
-          <img 
-            v-if="currentPlayer === 'yellow'" 
-            src="/images/turn-background-yellow.svg" 
-            alt="Turn Background Yellow" 
-            class="object-contai"
-          >
-        </div>
-        <div class="absolute inset-0 flex flex-col items-center justify-center">
-          <!-- Menambahkan kelas dinamis untuk warna teks yang benar -->
-          <p :class="currentPlayer === 'red' ? 'text-white text-base font-bold' : 'text-black text-base font-bold'">
-            PLAYER {{ currentPlayer === 'red' ? '1' : '2' }}'S TURN
-          </p>
-          <!-- Menambahkan kelas dinamis untuk warna teks timer -->
-          <p :class="currentPlayer === 'red' ? 'text-white text-3xl font-bold' : 'text-black text-3xl font-bold'">
-            {{ timer }}s
-          </p>
-        </div>
-      </div>
-    </transition>
-    
     <!-- second-backround -->
     <div 
-      class="fixed bottom-0 min-w-full h-1/3 md:h-1/4 rounded-t-3xl"
+      class="fixed bottom-0 min-w-full h-1/4 md:h-1/6 lg:h-1/5 rounded-t-3xl -z-10"
       :class="backgroundClass"
     ></div>
   </div>
@@ -197,12 +205,16 @@
 <script setup lang="ts">
 // Emit untuk kembali ke menu
 const emit = defineEmits(['back-to-menu']);
-
 const showMenu = ref(false);
-
 const continueGame = () => {
   showMenu.value = false; // Tutup modal dan lanjutkan game
 };
+const props = defineProps({
+  gameMode: {
+    type: String as () => 'playerVsPlayer' | 'playerVsCom',
+    required: true,
+  },
+});
 
 // indikator 
 const indicatorPosition = ref(0);
@@ -223,9 +235,10 @@ const updateIndicatorPosition = (event: MouseEvent) => {
 
 // State permainan
 const currentPlayer = ref<'red' | 'yellow'>('red');
-const score = ref<{ player1: number; player2: number }>({
+const score = ref<{ player1: number; player2: number; com:number }>({
   player1: 0,
-  player2: 0
+  player2: 0,
+  com: 0,
 });
 const timer = ref(30);
 let timerInterval: number;
@@ -244,28 +257,55 @@ initializeBoard();
 
 // logic game
 const placePiece = (col: number) => {
-  // Jika ada pemenang, hentikan fungsi
   if (winner.value) {
-    return;
+    return; // Hentikan jika sudah ada pemenang
   }
 
   for (let row = rows - 1; row >= 0; row--) {
     if (board.value[row][col] === null) {
       board.value[row][col] = currentPlayer.value;
-      checkWin(row, col);
+      checkWin(row, col); // Cek apakah ada pemenang
       if (!winner.value) {
-        checkDraw();
+        isDraw.value = checkDraw(); // Cek apakah seri
       }
 
-      if (!winner.value && !isDraw.value) { // Hanya ganti giliran jika tidak ada pemenang
-        switchTurn();
+      if (!winner.value && !isDraw.value) {
+        switchTurn(); // Ganti giliran
+
+        // Cek apakah giliran komputer setelah ganti turn
+        if (props.gameMode === 'playerVsCom' && currentPlayer.value === 'yellow') {
+          setTimeout(() => makeComputerMove(), 500); // Delay biar terasa lebih natural
+        }
       }
       return;
     }
   }
 };
 
-const winner = ref<string | null>(null);
+// Logika untuk COM (Computer)
+// Logika untuk COM (Computer) bisa ditambahkan di sini
+const makeComputerMove = () => {
+  if (props.gameMode === 'playerVsCom' && currentPlayer.value === 'yellow') {
+    // Implementasikan logika untuk membuat gerakan COM
+    const availableColumns = board.value[0]
+      .map((cell, col) => cell === null ? col : null)
+      .filter(col => col !== null);
+
+    if (availableColumns.length > 0) {
+      const randomCol = availableColumns[Math.floor(Math.random() * availableColumns.length)];
+      placePiece(randomCol);
+    }
+  }
+};
+
+// Panggil makeComputerMove setelah giliran pemain
+watch(currentPlayer, (newPlayer) => {
+  if (newPlayer === 'yellow' && props.gameMode === 'playerVsCom') {
+    setTimeout(makeComputerMove, 1000); // Beri jeda sebelum COM bergerak
+  }
+});
+
+const winner = ref<'player1' | 'player2' | 'com' | null>(null);
 const winningPositions = ref<{ row: number, col: number }[]>([]);
 const checkWin = (row: number, col: number) => {
   const directions = [
@@ -302,7 +342,12 @@ const checkWin = (row: number, col: number) => {
     }
 
     if (count >= 4) {
-      winner.value = currentPlayer.value === 'red' ? 'player1' : 'player2';
+      // Tentukan pemenang berdasarkan mode permainan
+      if (props.gameMode === 'playerVsCom') {
+        winner.value = currentPlayer.value === 'red' ? 'player1' : 'com'; // "YOU" atau "COM"
+      } else {
+        winner.value = currentPlayer.value === 'red' ? 'player1' : 'player2'; // "PLAYER 1" atau "PLAYER 2"
+      }
       winningPositions.value = positions;
       updateScore();
       return;
@@ -311,7 +356,8 @@ const checkWin = (row: number, col: number) => {
 };
 
 const isDraw = ref<boolean>(false);
-const checkDraw = () => {
+
+const checkDraw = (): boolean => {
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       if (board.value[row][col] === null) {
@@ -325,6 +371,7 @@ const checkDraw = () => {
 const backgroundClass = computed(() => {
   if (winner.value === 'player1') return 'bg-Pink';
   if (winner.value === 'player2') return 'bg-Yellow';
+  if (winner.value === 'com') return 'bg-Yellow';
   return 'bg-Purple'; // Default background
 });
 
@@ -333,11 +380,14 @@ const updateScore = () => {
     score.value.player1++;
   } else if (winner.value === 'player2') {
     score.value.player2++;
+  } else if (winner.value === 'com') {
+    score.value.com++;
   }
 };
 
 const playAgain = async () => {
   winner.value = null;
+  isDraw.value = false;
   initializeBoard();
   resetTimer();
   await nextTick();
@@ -368,7 +418,7 @@ const restartGame = (): void => {
   resetTimer();
   showMenu.value = false;
   initializeBoard();
-  score.value = { player1: 0, player2: 0 };
+  score.value = { player1: 0, player2: 0, com: 0 };
   board.value = Array(rows).fill(null).map(() => Array(cols).fill(null));
   winner.value = null;
   winningPositions.value = [];
@@ -466,7 +516,7 @@ function defineEmits(arg0: "back-to-menu"[]) {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-20px);
+    transform: translateY(-10px);
   }
 }
 
@@ -482,12 +532,13 @@ function defineEmits(arg0: "back-to-menu"[]) {
 }
 
 .fall-animation {
-  animation: fall 0.5s ease-in-out forwards, bounce 0.3s 0.5s ease-in-out;
+  animation: fall 0.3s ease-in-out forwards, bounce 0.2s 0.3s ease-in-out;
 }
 
 .fall-enter-active {
-  animation: fall 0.5s ease-in-out forwards, bounce 0.3s 0.5s ease-in-out;
+  animation: fall 0.3s ease-in-out forwards, bounce 0.2s 0.3s ease-in-out;
 }
+
 
 .fall-leave-active {
   animation: disappear 0.3s ease-in-out forwards;
