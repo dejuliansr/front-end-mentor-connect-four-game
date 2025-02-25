@@ -4,14 +4,14 @@
     <Transition name="fade-slide" mode="out-in">
       <div v-if="!showRules && !showGame" class="bg-Light-Purple p-10 rounded-3xl w-full max-w-md shadow-lg sm:border-4 sm:border-b-8 sm:border-black relative">
         <div class="flex justify-center py-8">
-          <img src="/images/logo.svg" alt="logo">
+          <img src="/assets/images/logo.svg" alt="logo">
         </div>
         <div class="mt-6">
           <!-- Tombol 1 -->
           <button @click="setGameMode('playerVsCom')" class="w-full h-16 flex justify-between items-center text-xl px-4 mt-5 bg-Pink text-white font-bold rounded-2xl border-2 border-black hover:border-Purple shadow-md cursor-pointer">
             PLAYER VS CPU
             <span class="flex items-center gap-2">
-              <img src="/images/player-vs-cpu.svg" alt="Icon Playe VS CPU" class="h-10 w-auto">
+              <img src="/assets/images/player-vs-cpu.svg" alt="Icon Playe VS CPU" class="h-10 w-auto">
             </span>
           </button>
 
@@ -19,7 +19,7 @@
           <button @click="setGameMode('playerVsPlayer')" class="w-full h-16 flex justify-between items-center text-xl px-4 mt-5 bg-Yellow text-black font-bold rounded-2xl border-2 border-black hover:border-Purple shadow-md cursor-pointer">
             PLAY VS PLAYER
             <span class="flex items-center gap-2">
-              <img src="/images/player-vs-player.svg" alt="Icon Player VS Player" class="h-10 w-auto">
+              <img src="/assets/images/player-vs-player.svg" alt="Icon Player VS Player" class="h-10 w-auto">
             </span>
           </button>
 
@@ -60,7 +60,7 @@
         <div class="absolute left-1/2 transform -translate-x-1/2">
           <!-- Tombol Ceklis untuk Kembali ke Menu -->
           <button @click="showRules = false" class="mx-auto flex justify-center items-center bg-Pink text-white hover:border-Purple rounded-full shadow-md cursor-pointer">
-            <img src="/images/icon-check.svg" alt="icon Check" class="hover:border-Purple">
+            <img src="/assets/images/icon-check.svg" alt="icon Check" class="hover:border-Purple">
           </button>
         </div>
       </div>
