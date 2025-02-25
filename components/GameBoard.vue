@@ -4,11 +4,11 @@
     <Transition name="fade-header" appear>
       <div class="flex items-center justify-between w-full max-w-xl md:pt-4 lg:pt-12">
         <button @click="showMenu = true" class="bg-Purple px-6 py-2 hover:bg-Pink text-white font-bold text-base rounded-full cursor-pointer">MENU</button>
-        <img src="/images/logo.svg" alt="">
-        <button @click="restartGame()" class="bg-Purple px-6 py-3 hover:bg-Pink text-white font-bold text-base rounded-full cursor-pointer">RESTART</button>
+        <img src="/assets/images/logo.svg" alt="">
+        <button @click="restartGame()" class="bg-Purple px-3 py-3 hover:bg-Pink text-white font-bold text-base rounded-full cursor-pointer">RESTART</button>
         <Transition name="fade-scale" mode="out-in">
-          <div v-if="showMenu" class="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
-            <div class="bg-Light-Purple p-10 rounded-3xl w-full max-w-md shadow-lg sm:border-4 sm:border-b-8 sm:border-black relative">
+          <div v-if="showMenu" class="fixed inset-0 bg-black/50 flex items-center justify-center p-3 z-[60]">
+            <div class="bg-Light-Purple p-10 rounded-3xl w-full max-w-md shadow-lg border-4 border-Black relative">
               <div class="text-center">
                 <p class="text-5xl text-White py-7 font-bold">PAUSE</p>
     
@@ -33,13 +33,13 @@
     <div class="grid grid-cols-2 justify-items-center lg:flex lg:flex-row lg:justify-center lg:items-center w-full md:max-w-2xl lg:max-w-5xl m-4 lg:gap-10">
       <!-- score player one -->
       <transition name="fade-player-one" appear>
-        <div class="relative flex justify-center items-center bg-white w-5/6 lg:w-1/7 rounded-3xl p-4 lg:p-7 border-4 border-b-8 border-black lg:order-1">
+        <div class="relative flex justify-center items-center bg-white w-5/6 lg:w-1/7 h-20 md:h-auto rounded-3xl p-4 lg:p-7 border-4 border-b-8 border-black lg:order-1">
           <div class="absolute -left-5 lg:left-1/2 md:top-4 lg:top-0 transform lg:-translate-x-1/2 lg:-translate-y-1/2">
-            <img src="/images/player-one.svg" alt="Icon Player One" class="h-12">
+            <img src="/assets/images/player-one.svg" alt="Icon Player One" class="h-12">
           </div>
-          <div class="flex flex-col md:flex-row lg:flex-col justify-center items-center md:gap-7 lg:gap-0 lg:pt-4">
+          <div class="flex flex-col md:flex-row lg:flex-col w-full justify-around items-center md:gap-7 lg:gap-0 lg:pt-4">
             <p class="font-bold">{{ props.gameMode === 'playerVsCom' ? 'YOU' : 'PLAYER 1' }}</p>
-            <p class="text-3xl md:text-5xl font-bold">{{ score.player1 }}</p>
+            <p class="text-3xl md:text-6xl font-bold">{{ score.player1 }}</p>
           </div>
         </div>
       </transition>
@@ -48,11 +48,11 @@
         <!-- score player two -->
         <div class="relative flex justify-center items-center bg-white w-5/6 md:py-5 lg:w-1/7 rounded-3xl lg:p-7 border-4 border-b-8 border-black lg:order-3">
           <div class="absolute -right-5 lg:right-5 lg:left-1/2 md:top-4 lg:top-0 transform lg:-translate-x-1/2 lg:-translate-y-1/2">
-            <img src="/images/player-two.svg" alt="Icon Player Two" class="h-12">
+            <img src="/assets/images/player-two.svg" alt="Icon Player Two" class="h-12">
           </div>
-          <div class="flex flex-col md:flex-row-reverse lg:flex-col justify-center items-center gap-0 md:gap-7 lg:gap-0 lg:pt-4">
+          <div class="flex flex-col md:flex-row-reverse lg:flex-col  w-full justify-around items-center gap-0 md:gap-7 lg:gap-0 lg:pt-4">
             <p class="font-bold">{{ props.gameMode === 'playerVsCom' ? 'COM' : 'PLAYER 2' }}</p>
-            <p class="text-3xl md:text-5xl font-bold">{{ props.gameMode === 'playerVsCom' ? score.com : score.player2 }}</p>
+            <p class="text-3xl md:text-6xl font-bold">{{ props.gameMode === 'playerVsCom' ? score.com : score.player2 }}</p>
           </div>
         </div>
       </transition>
@@ -67,11 +67,11 @@
         
         <transition name="fade-scale" appear>
           <div class="relative w-full" @mousemove="updateIndicatorPosition">
-            <img src="/images/board-layer-white-small.svg" alt="Board Game" class="absolute flex sm:hidden z-30 pointer-events-none">
-            <img src="/images/board-layer-black-small.svg" alt="Board Layer" class="flex sm:hidden">
+            <img src="/assets/images/board-layer-white-small.svg" alt="Board Game" class="absolute flex sm:hidden z-30 pointer-events-none">
+            <img src="/assets/images/board-layer-black-small.svg" alt="Board Layer" class="flex sm:hidden">
             
-            <img src="/images/board-layer-white-large.svg" alt="Board Game" class="absolute w-full h-auto object-cover hidden sm:flex z-30 pointer-events-none">
-            <img src="/images/board-layer-black-large.svg" alt="Board Layer" class="hidden w-full h-auto object-contain sm:flex">
+            <img src="/assets/images/board-layer-white-large.svg" alt="Board Game" class="absolute w-full h-auto object-cover hidden sm:flex z-30 pointer-events-none">
+            <img src="/assets/images/board-layer-black-large.svg" alt="Board Layer" class="hidden w-full h-auto object-contain sm:flex">
 
             <!-- Tambahkan div untuk menampilkan kepingan -->
             <div class="absolute mb-9 sm:mb-[70px] mt-1 sm:mt-5 inset-0 flex flex-col justify-between">
@@ -93,7 +93,7 @@
                   <transition name="fall" mode="out-in">
                     <img 
                       v-if="cell === 'red'" 
-                      src="/images/counter-red-small.svg" 
+                      src="/assets/images/counter-red-small.svg" 
                       alt="Red piece"
                       class="flex sm:hidden z-20"
                     />
@@ -101,7 +101,7 @@
                   <transition name="fall" mode="out-in">
                     <img 
                       v-if="cell === 'red'" 
-                      src="/images/counter-red-large.svg" 
+                      src="/assets/images/counter-red-large.svg" 
                       alt="Red piece"
                       class="hidden sm:flex z-20"
                     />
@@ -110,7 +110,7 @@
                   <transition name="fall" mode="out-in">
                     <img 
                       v-if="cell === 'yellow'" 
-                      src="/images/counter-yellow-small.svg" 
+                      src="/assets/images/counter-yellow-small.svg" 
                       alt="Yellow piece"
                       class="flex sm:hidden z-20"
                     />
@@ -118,7 +118,7 @@
                   <transition name="fall" mode="out-in">
                     <img 
                       v-if="cell === 'yellow'" 
-                      src="/images/counter-yellow-large.svg" 
+                      src="/assets/images/counter-yellow-large.svg" 
                       alt="Yellow piece"
                       class="hidden sm:flex z-20"
                     />
@@ -140,13 +140,13 @@
             <div class="relative w-full flex justify-center">
               <img 
                 v-if="currentPlayer === 'red'" 
-                src="/images/turn-background-red.svg" 
+                src="/assets/images/turn-background-red.svg" 
                 alt="Turn Background Red" 
                 class="object-contain"
               >
               <img 
                 v-if="currentPlayer === 'yellow'" 
-                src="/images/turn-background-yellow.svg" 
+                src="/assets/images/turn-background-yellow.svg" 
                 alt="Turn Background Yellow" 
                 class="object-contai"
               >
